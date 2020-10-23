@@ -31,7 +31,7 @@ const github = axiosBase.create({
  */
 
  const getStargazersCount = async() => {
-    const result = await github.get('https://api.github.com/users/marieooq/repos');
+    const result = await github.get('https://api.github.com/users/marieooq/repos?per_page=100');
     const data = result.data;
     const stargazers = data.map(val => val.stargazers_count);
     const stargazersCount = stargazers.reduce((accum, val) => accum + val, 0);
