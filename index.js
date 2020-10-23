@@ -10,9 +10,9 @@ const app = express();
 app.use(cors());
 
 const env = process.env;
-
 const GITHUB_API_URL = 'https://api.github.com';
 const GITHUB_TOKEN = env.GITHUB_TOKEN;
+const USER_NAME = 'marieooq';
 
 //Prepare axios for GitHub API
 const github = axiosBase.create({
@@ -30,8 +30,8 @@ const github = axiosBase.create({
  * @param{String} owner Owner name
  */
 
- const getStargazersCount = async() => {
-    const result = await github.get('https://api.github.com/users/marieooq/repos?per_page=100');
+ const getStargazersCount = async(username) => {
+    const result = await github.get(`https://api.github.com/users/${username}/repos?per_page=100`);
     const data = result.data;
     const stargazers = data.map(val => val.stargazers_count);
     const stargazersCount = stargazers.reduce((accum, val) => accum + val, 0);
@@ -73,7 +73,7 @@ const github = axiosBase.create({
 let stargazersCount;
 (async () => {
 //    const marieooqRepos = await getGithubRepos('users', 'marieooq');
-    stargazersCount = await getStargazersCount();
+    stargazersCount = await getStargazersCount(USER_NAME);
 //    console.log(stargazersCount);
 })();
 
