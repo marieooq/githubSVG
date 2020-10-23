@@ -1,10 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const axiosBase = require('axios');
-const githubSVG = require('./github');
+const generateGithubSVG = require('./github');
 require('dotenv').config();
 
-// console.log(githubSVG);
+// console.log(generateGithubSVG);
 
 const app = express();
 app.use(cors());
@@ -70,9 +70,10 @@ const github = axiosBase.create({
 
 // demo
 
+let stargazersCount;
 (async () => {
 //    const marieooqRepos = await getGithubRepos('users', 'marieooq');
-   const stargazersCount = await getStargazersCount();
+    stargazersCount = await getStargazersCount();
 //    console.log(stargazersCount);
 })();
 
@@ -81,8 +82,7 @@ const github = axiosBase.create({
 
 
 app.get('/', (req, res) => {
-    // res.send(githubSVG)
-    res.send('hello world')
+    res.send(generateGithubSVG(stargazersCount))
 })
 
 
