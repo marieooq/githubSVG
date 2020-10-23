@@ -4,7 +4,7 @@ const axiosBase = require('axios');
 
 // const env = process.env;
 const GITHUB_API_URL = 'https://api.github.com';
-const GITHUB_TOKEN = '*************';
+const GITHUB_TOKEN = functions.config().someservice.token;
 const USER_NAME = 'marieooq';
 
 const getStargazersCount = async (username) => {
