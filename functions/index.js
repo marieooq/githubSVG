@@ -29,7 +29,7 @@ const github = axiosBase.create({
   responseType: 'json',
 });
 
-exports.helloWorld = functions.https.onRequest(async (req, res) => {
+exports.callGithubReadmeWidget = functions.https.onRequest(async (req, res) => {
   //  response.send("Hello Marie!");
   const stargazersCount = await getStargazersCount(USER_NAME);
   res.send(generateGithubSVG(stargazersCount));
