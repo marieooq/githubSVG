@@ -2,11 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const axiosBase = require('axios');
 const generateGithubSVG = require('./github');
-require('dotenv').config();
-
-// console.log(generateGithubSVG);
-
+const getContributionCollection = require('./getContributionCollection');
 const app = express();
+require('dotenv').config();
 app.use(cors());
 
 const env = process.env;
@@ -16,12 +14,12 @@ const USER_NAME = 'marieooq';
 
 //Prepare axios for GitHub API
 const github = axiosBase.create({
-    baseURL: GITHUB_API_URL,
-    headers: {
-        'Content-Type' : 'application/json',
-        'Authorization' : `token ${GITHUB_TOKEN}`,
-    },
-    responseType: 'json',
+  baseURL: GITHUB_API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `token ${GITHUB_TOKEN}`,
+  },
+  responseType: 'json',
 });
 
 /**
@@ -30,14 +28,15 @@ const github = axiosBase.create({
  * @param{String} owner Owner name
  */
 
- const getStargazersCount = async(username) => {
-    const result = await github.get(`https://api.github.com/users/${username}/repos?per_page=100`);
-    const data = result.data;
-    const stargazers = data.map(val => val.stargazers_count);
-    const stargazersCount = stargazers.reduce((accum, val) => accum + val, 0);
-    return stargazersCount;
-    
- }
+const getStargazersCount = async (username) => {
+  const result = await github.get(
+    `https://api.github.com/users/${username}/repos?per_page=100`
+  );
+  const data = result.data;
+  const stargazers = data.map((val) => val.stargazers_count);
+  const stargazersCount = stargazers.reduce((accum, val) => accum + val, 0);
+  return stargazersCount;
+};
 
 //  const getGithubRepos = async(ownerType, owner) => {
 //      let url = `${ownerType}/${owner}/repos?sort=full_name`;
@@ -67,25 +66,20 @@ const github = axiosBase.create({
 //     };
 //   }
 
-
 // demo
 
 let stargazersCount;
 (async () => {
-//    const marieooqRepos = await getGithubRepos('users', 'marieooq');
-    stargazersCount = await getStargazersCount(USER_NAME);
-//    console.log(stargazersCount);
+  //    const marieooqRepos = await getGithubRepos('users', 'marieooq');
+  stargazersCount = await getStargazersCount(USER_NAME);
+  //    console.log(stargazersCount);
 })();
 
-
-
-
-
 app.get('/', (req, res) => {
-    res.send(generateGithubSVG(stargazersCount))
-})
-
+  //   res.send(generateGithubSVG(stargazersCount));
+  res.send(getContributionCollection());
+});
 
 app.listen(4000, () => {
-    console.log(`Products server listening on port 4000`)
+  console.log(`Products server listening on port 4000`);
 });
